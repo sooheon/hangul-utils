@@ -2,9 +2,10 @@
 (def version "0.1.0-SNAPSHOT")
 
 (set-env! :resource-paths #{"resources" "src"}
-          :source-paths   #{"test"}
-          :dependencies   '[[org.clojure/clojure "RELEASE"]
-                            [adzerk/boot-test "RELEASE" :scope "test"]])
+          :source-paths #{"test"}
+          :dependencies '[[org.clojure/clojure "RELEASE"]
+                          [adzerk/boot-test "RELEASE" :scope "test"]
+                          [adzerk/bootlaces "0.1.13"]])
 
 (task-options!
  pom {:project     project
@@ -20,4 +21,5 @@
   []
   (comp (pom) (jar) (install)))
 
-(require '[adzerk.boot-test :refer [test]])
+(require '[adzerk.boot-test :refer [test]]
+         '[adzerk.bootlaces :refer :all])
