@@ -5,7 +5,7 @@
           :source-paths #{"test"}
           :dependencies '[[org.clojure/clojure "RELEASE"]
                           [adzerk/boot-test "RELEASE" :scope "test"]
-                          [adzerk/bootlaces "0.1.13"]])
+                          [adzerk/bootlaces "0.1.13" :scope "test"]])
 
 (task-options!
  pom {:project     project
