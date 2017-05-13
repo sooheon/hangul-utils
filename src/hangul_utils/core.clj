@@ -1,6 +1,7 @@
 (ns hangul-utils.core
   (:require [clojure.string :as str]
-            [clojure.set :as set]))
+            [clojure.set :as set]
+            [clojure.spec.alpha :as s]))
 
 ;; The unicode codepoints for Hangul syllables are determined using the
 ;; following equation:
@@ -8,10 +9,6 @@
 (defn korean-syllable?
   [c]
   (<= 0xAC00 (int c) 0xD7A3))
-
-(defn korean-letter?
-  [c]
-  (<= 0x1100 (int c) 0x11FF))
 
 (def ^:private initial-jaeums
   [\ㄱ \ㄲ \ㄴ \ㄷ \ㄸ \ㄹ \ㅁ \ㅂ \ㅃ \ㅅ \ㅆ \ㅇ \ㅈ \ㅉ \ㅊ \ㅋ \ㅌ \ㅍ \ㅎ])
@@ -82,15 +79,16 @@
 (defn syllabize
   "Takes a valid string of Korean alphabets, and reconstructs Korean text"
   [s]
-  (let [[acc syl limbo]
-        (reduce (fn [[acc syl limbo] c]
-                  (cond
-                    (and (empty? syl) (initial? c)) [acc [c] nil]
-                    (and (not limbo) (medial? c)) [acc (conj syl c) nil]
-                    (and (not limbo) (final? c)) [acc syl c]
-                    (and limbo (initial? c)) [(conj acc (conj syl limbo)) [c] nil]
-                    (and limbo (medial? c)) [(conj acc syl) [limbo c] nil]
-                    (not (korean-letter? c)) [(conj acc (conj syl limbo) [c]) [] nil]))
-                [[] [] nil]
-                s)]
-    (construct-str (conj acc (conj syl limbo)))))
+  (let [[a s l]
+        (reduce
+         (fn [[acc syl limbo] c]
+           (cond
+             (and (empty? syl) (initial? c))                 [acc [c] nil]
+             (and (= 1 (count syl)) (not limbo) (medial? c)) [acc (conj syl c) nil]
+             (and (not limbo) (final? c))                    [acc syl c]
+             (and limbo (initial? c))                        [(conj acc (conj syl limbo)) [c] nil]
+             (and limbo (medial? c))                         [(conj acc syl) [limbo c] nil]
+             :else                                           [(conj acc (conj syl limbo) [c]) [] nil]))
+         [[] [] nil]
+         s)]
+    (construct-str (conj a (conj s l)))))
