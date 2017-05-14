@@ -32,7 +32,7 @@ You can also transform strings end-to-end:
 
 ## Thanks
 
-Thanks to kaniblu for the [hangul-utils](https://github.com/kaniblu/hangul-utils)
+Thanks to kaniblu for the Python [hangul-utils](https://github.com/kaniblu/hangul-utils) library, which inspired this.
 
 ## License
 
