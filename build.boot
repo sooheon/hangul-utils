@@ -19,6 +19,8 @@
       :license     {"Eclipse Public License"
                     "http://www.eclipse.org/legal/epl-v10.html"}})
 
+(bootlaces! version)
+
 (deftask build
   "Build and install the project locally."
   []
