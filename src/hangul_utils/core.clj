@@ -78,7 +78,16 @@
   (apply str (flatten (deconstruct-str s))))
 
 (defn syllabize
-  "Takes a string of Korean alphabets, and reconstructs Korean text."
+  "Takes a string of Korean alphabets, and reconstructs Korean text. The initial
+  value for the reduce fn is a vector containing the accumulated result, the
+  current syllable under consideration, and the most recent consonant in
+  limbo (to be classified as initial or final).
+
+  Each new char read in from the input string is either added to the current
+  syllable vector or sent into limbo, and can trigger the syllable to be conj'd
+  onto the accumulator once it's fully constructed.
+
+  The cond branches could use more cleanup."
   [s]
   (let [[acc syl limbo]
         (reduce
