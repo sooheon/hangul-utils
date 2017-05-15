@@ -80,17 +80,17 @@
 (defn syllabize
   "Takes a string of Korean alphabets, and reconstructs Korean text."
   [s]
-  (let [[a s l]
+  (let [[acc syl limbo]
         (reduce
          (fn [[acc syl limbo] c]
            (cond
-             (and (empty? syl) (initial? c)) [acc [c] nil]
-             (and (= 1 (count syl)) (not limbo) (medial? c)) [acc (conj syl c) nil]
-             (and (= 1 (count syl)) (not limbo) (not (medial? c))) [(conj acc syl) [c] nil]
-             (and (not limbo) (final? c)) [acc syl c]
-             (and limbo (initial? c)) [(conj acc (conj syl limbo)) [c] nil]
-             (and limbo (medial? c)) [(conj acc syl) [limbo c] nil]
-             :else [(conj acc (conj syl limbo) [c]) [] nil]))
+             (and (empty? syl) (initial? c))     [acc [c] nil]
+             (and (= 1 (count syl)) (not limbo)) (if (medial? c) [acc (conj syl c) nil]
+                                                     [(conj acc syl) [c] nil])
+             (and (not limbo) (final? c))        [acc syl c]
+             (and limbo (initial? c))            [(conj acc (conj syl limbo)) [c] nil]
+             (and limbo (medial? c))             [(conj acc syl) [limbo c] nil]
+             :else                               [(conj acc (conj syl limbo) [c]) [] nil]))
          [[] [] nil]
          s)]
-    (construct-str (conj a (conj s l)))))
+    (construct-str (conj acc (conj syl limbo)))))
