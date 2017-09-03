@@ -1,21 +1,20 @@
-machine:
-  java:
-    version: oraclejdk8
-  environment:
-    _JAVA_OPTIONS: "-Xms512m -Xmx1024m"
-
-dependencies:
-  pre:
-    - curl -L https://github.com/boot-clj/boot-bin/releases/download/2.7.1/boot.sh -o ~/bin/boot
-    - chmod +x ~/bin/boot
-  override:
-    - boot test
-  cache_directories:
-    - "~/bin"
-    - "~/.m2"
-    - "~/.boot/cache/bin"
-    - "~/.boot/cache/lib"
-
-test:
-  override:
-    - echo 1
+version: 2
+jobs:
+  build:
+    working_directory: ~/hangul-utils
+    docker:
+      - image: clojure:boot-2.7.1-alpine
+    steps:
+      - checkout
+      - restore_cache:
+          key: hangul-utils-{{ checksum "boot.properties" }}-{{ checksum "build.boot" }}
+      - run: boot test
+      - save_cache:
+          paths:
+            - ~/.m2
+            - ~/.boot/cache/lib
+            - ~/.boot/cache/bin
+          key: hangul-utils-{{ checksum "boot.properties" }}-{{ checksum "build.boot" }}
+    environment:
+      BOOT_JVM_OPTIONS: "-Xms512m -Xmx1024m"
+      BOOT_WATCHERS_DISABLE: "yes"
