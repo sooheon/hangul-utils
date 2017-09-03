@@ -8,7 +8,7 @@
                           [adzerk/bootlaces "0.1.13" :scope "test"]])
 
 (require '[adzerk.boot-test :refer [test]]
-         '[adzerk.bootlaces :refer :all])
+         '[adzerk.bootlaces :refer [bootlaces!]])
 
 (task-options!
  pom {:project     project
