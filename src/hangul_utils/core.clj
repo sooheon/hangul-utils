@@ -28,9 +28,9 @@
 (def ^:private final? (set final-jaeums))
 
 (defn deconstruct
-  [c]
   "Takes a single Korean syllable char and deconstructs it into its constituent
   jamo char: 강 => [ㄱ ㅏ ㅇ]"
+  [c]
   (let [codepoint (int c)
         diff (- codepoint 0xAC00)
         i (Math/floorDiv diff 588)
