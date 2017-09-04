@@ -8,7 +8,7 @@
                           [adzerk/bootlaces "0.1.13" :scope "test"]])
 
 (require '[adzerk.boot-test :refer [test]]
-         '[adzerk.bootlaces :refer [bootlaces! build-jar push-repo]])
+         '[adzerk.bootlaces :refer [bootlaces! build-jar push-snapshot]])
 
 (task-options!
  pom {:project     project
