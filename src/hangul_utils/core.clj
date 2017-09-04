@@ -45,7 +45,7 @@
            vec))))
 
 (defn construct
-  "Takes a vector of valid jamo cars and constructs a syllable char."
+  "Takes a vector of valid jamo chars and constructs a syllable char."
   [[i m f]]
   (if (and (not m) (not f))
     i
