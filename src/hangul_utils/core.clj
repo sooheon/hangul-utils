@@ -7,23 +7,29 @@
 ;; following equation:
 
 (defn korean-syllable?
+  "Checks whether a given char lies within the Unicode codepoint range for
+  Korean."
   [c]
   (<= 0xAC00 (int c) 0xD7A3))
 
 (def ^:private initial-jaeums
+  "The jaeums (consonants) which begin Korean characters in modern usage."
   [\ㄱ \ㄲ \ㄴ \ㄷ \ㄸ \ㄹ \ㅁ \ㅂ \ㅃ \ㅅ \ㅆ \ㅇ \ㅈ \ㅉ \ㅊ \ㅋ \ㅌ \ㅍ \ㅎ])
 
-(def ^:private initial? (set initial-jaeums))
-
 (def ^:private medial-moeums
+  "The moeums (vowels) which begin Korean characters in modern usage."
   [\ㅏ \ㅐ \ㅑ \ㅒ \ㅓ \ㅔ \ㅕ \ㅖ \ㅗ \ㅘ \ㅙ \ㅚ \ㅛ \ㅜ \ㅝ \ㅞ \ㅟ \ㅠ \ㅡ
    \ㅢ \ㅣ])
 
-(def ^:private medial? (set medial-moeums))
-
 (def ^:private final-jaeums
+  "The jaeums (consonants) which end Korean characters in modern usage. `nil` is
+  included for the characters only made up of two jamo."
   [nil \ㄱ \ㄲ \ㄳ \ㄴ \ㄵ \ㄶ \ㄷ \ㄹ \ㄺ \ㄻ \ㄼ \ㄽ \ㄾ \ㄿ \ㅀ \ㅁ \ㅂ \ㅄ
    \ㅅ \ㅆ \ㅇ \ㅈ \ㅊ \ㅋ \ㅌ \ㅍ \ㅎ])
+
+(def ^:private initial? (set initial-jaeums))
+
+(def ^:private medial? (set medial-moeums))
 
 (def ^:private final? (set final-jaeums))
 
