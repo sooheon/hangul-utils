@@ -72,14 +72,14 @@
           s))
 
 (defn construct-str
-  "Takes a collection of vectors of jamo and joins them into a string of syllables.
-  [[ㄱ ㅏ ㅇ] [ㅅ ㅏ ㄴ]] => \"강산\""
+  "Takes a collection of vectors of jamo and joins them into a string of
+  syllables. [[ㄱ ㅏ ㅇ] [ㅅ ㅏ ㄴ]] => \"강산\""
   [c]
   (apply str (map construct c)))
 
 (defn alphabetize
-  "Takes a Korean text string and returns a string of the deconstructed
-  alphabet. Ignores (passes along) non-valid Korean characters."
+  "Takes a Korean text string and returns a string of the deconstructed alphabet.
+  Ignores (passes along) non-valid Korean characters."
   [s]
   (apply str (flatten (deconstruct-str s))))
 

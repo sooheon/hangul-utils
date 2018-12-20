@@ -1,0 +1,11 @@
+{:paths ["src"]
+ :aliases
+ {:test {:extra-paths ["test"]
+         :extra-deps {lambdaisland/kaocha {:mvn/version "0.0-319"}}}
+  :pack {:extra-deps
+         {pack/pack.alpha {:git/url "https://github.com/juxt/pack.alpha.git"
+                           :sha "24863d1ff5a54bb7cc783ff62272212b51c8b316"}}
+         :main-opts ["-m"]}
+  :deploy {:extra-deps {deps-deploy {:mvn/version "RELEASE"}}
+           :main-opts ["-m" "deps-deploy.deps-deploy" "deploy"
+                       "dist/hangul-utils.jar"]}}}

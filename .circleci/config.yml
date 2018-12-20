@@ -1,25 +1,19 @@
-# Clojure CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-clojure/ for more details
-
 version: 2
 jobs:
   build:
     working_directory: ~/hangul-utils
     docker:
-      - image: clojure:boot-2.7.1-alpine
+      - image: circleci/clojure:tools-deps-node-browsers-legacy
+    environment:
+      JVM_OPTS: -Xmx3200m
     steps:
-      - checkout
-      # Download and cache dependencies
-      - restore_cache:
-          key: hangul-utils-{{ checksum "boot.properties" }}-{{ checksum "build.boot" }}
-      - run: boot test
+      - checkout # checkout source code to working dir
+      - restore_cache: # uses cache if checksum is same
+          key: hangul-utils-{{ checksum "deps.edn" }}
+      - run: make kaocha
       - save_cache:
           paths:
             - ~/.m2
-            - ~/.boot/cache/lib
-            - ~/.boot/cache/bin
-          key: hangul-utils-{{ checksum "boot.properties" }}-{{ checksum "build.boot" }}
-    environment:
-      BOOT_JVM_OPTIONS: "-Xms512m -Xmx1024m"
-      BOOT_WATCHERS_DISABLE: "yes"
+          key: hangul-utils-{{ checksum "deps.edn" }}
+      - store_artifacts:
+          path: dist/hangul-utils.jar
