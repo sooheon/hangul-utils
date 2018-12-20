@@ -10,7 +10,7 @@ jobs:
       - checkout # checkout source code to working dir
       - restore_cache: # uses cache if checksum is same
           key: hangul-utils-{{ checksum "deps.edn" }}
-      - run: make kaocha
+      - run: bin/kaocha
       - save_cache:
           paths:
             - ~/.m2
