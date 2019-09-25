@@ -1,0 +1,4 @@
+#!/bin/bash
+
+mvn deploy:deploy-file -Dfile=dist/hangul-utils.jar -DrepositoryId=clojars \
+  -Durl=https://clojars.org/repo -DpomFile=pom.xml

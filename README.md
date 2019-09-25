@@ -40,6 +40,10 @@ You can also transform strings end-to-end. Since it is common to encounter Korea
 
 Be aware that `alphabetize` is just a simple helper function to avoid having to call `(apply str ...)` too often. Since the jamo are represented in plain Clojure vectors, you can always do operations such as `(flatten (deconstruct-str "가나다라마"))` to get `'(\ㄱ \ㅏ \ㄴ \ㅏ \ㄷ \ㅏ \ㄹ \ㅏ \ㅁ \ㅏ)`.
 
+## Deploy
+
+https://github.com/juxt/pack.alpha#skinny-jar
+
 ## Thanks
 
 Thanks to kaniblu for the Python [hangul-utils](https://github.com/kaniblu/hangul-utils) library, which inspired this.

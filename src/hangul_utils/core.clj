@@ -1,10 +1,9 @@
 (ns hangul-utils.core
-  (:require [clojure.string :as str]
-            [clojure.set :as set]
-            [clojure.spec.alpha :as s]))
+  (:require
+   [clojure.string :as str]
+   [clojure.set :as set]
+   [clojure.spec.alpha :as s]))
 
-;; The unicode codepoints for Hangul syllables are determined using the
-;; following equation:
 
 (defn korean-syllable?
   "Checks whether a given char lies within the Unicode codepoint range for
@@ -22,8 +21,8 @@
    \ㅢ \ㅣ])
 
 (def ^:private final-jaeums
-  "The jaeums (consonants) which end Korean characters in modern usage. `nil` is
-  included for the characters only made up of two jamo."
+  "The jaeums (consonants) which end Korean characters in modern usage. `nil`
+   is included for the characters only made up of two jamo."
   [nil \ㄱ \ㄲ \ㄳ \ㄴ \ㄵ \ㄶ \ㄷ \ㄹ \ㄺ \ㄻ \ㄼ \ㄽ \ㄾ \ㄿ \ㅀ \ㅁ \ㅂ \ㅄ
    \ㅅ \ㅆ \ㅇ \ㅈ \ㅊ \ㅋ \ㅌ \ㅍ \ㅎ])
 
@@ -34,8 +33,8 @@
 (def ^:private final? (set final-jaeums))
 
 (defn deconstruct
-  "Takes a single Korean syllable char and deconstructs it into its constituent
-  jamo char: 강 => [ㄱ ㅏ ㅇ]"
+  "Takes a single Korean syllable char and deconstructs it into its
+   constituent jamo char: 강 => [ㄱ ㅏ ㅇ]"
   [c]
   (let [codepoint (int c)
         diff (- codepoint 0xAC00)
@@ -73,39 +72,39 @@
 
 (defn construct-str
   "Takes a collection of vectors of jamo and joins them into a string of
-  syllables. [[ㄱ ㅏ ㅇ] [ㅅ ㅏ ㄴ]] => \"강산\""
+   syllables. [[ㄱ ㅏ ㅇ] [ㅅ ㅏ ㄴ]] => \"강산\""
   [c]
   (apply str (map construct c)))
 
 (defn alphabetize
-  "Takes a Korean text string and returns a string of the deconstructed alphabet.
-  Ignores (passes along) non-valid Korean characters."
+  "Takes a Korean text string and returns a string of the deconstructed
+   alphabet. Ignores (passes along) non-valid Korean characters."
   [s]
   (apply str (flatten (deconstruct-str s))))
 
 (defn syllabize
-  "Takes a string of Korean alphabets, and reconstructs Korean text. The initial
-  value for the reduce fn is a vector containing the accumulated result, the
-  current syllable under consideration, and the most recent consonant in
-  limbo (to be classified as initial or final).
+  "Takes a string of Korean alphabets, and reconstructs Korean text. The
+   initial value for the reduce fn is a vector containing the accumulated
+   result, the current syllable under consideration, and the most recent
+   consonant in limbo (to be classified as initial or final).
 
-  Each new char read in from the input string is either added to the current
-  syllable vector or sent into limbo, and can trigger the syllable to be conj'd
-  onto the accumulator once it's fully constructed.
+   Each new char read in from the input string is either added to the current
+   syllable vector or sent into limbo, and can trigger the syllable to be
+   conj'd onto the accumulator once it's fully constructed.
 
-  The cond branches could use more cleanup."
+   The cond branches could use more cleanup."
   [s]
   (let [[acc syl limbo]
         (reduce
          (fn [[acc syl limbo] c]
            (cond
-             (and (empty? syl) (initial? c))     [acc [c] nil]
+             (and (empty? syl) (initial? c)) [acc [c] nil]
              (and (= 1 (count syl)) (not limbo)) (if (medial? c) [acc (conj syl c) nil]
-                                                     [(conj acc syl) [c] nil])
-             (and (not limbo) (final? c))        [acc syl c]
-             (and limbo (initial? c))            [(conj acc (conj syl limbo)) [c] nil]
-             (and limbo (medial? c))             [(conj acc syl) [limbo c] nil]
-             :else                               [(conj acc (conj syl limbo) [c]) [] nil]))
+                                                                 [(conj acc syl) [c] nil])
+             (and (not limbo) (final? c)) [acc syl c]
+             (and limbo (initial? c)) [(conj acc (conj syl limbo)) [c] nil]
+             (and limbo (medial? c)) [(conj acc syl) [limbo c] nil]
+             :else [(conj acc (conj syl limbo) [c]) [] nil]))
          [[] [] nil]
          s)]
     (construct-str (conj acc (conj syl limbo)))))

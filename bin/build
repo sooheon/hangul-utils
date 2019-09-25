@@ -1,0 +1,4 @@
+#!/bin/bash
+
+clojure -A:pack mach.pack.alpha.skinny --no-libs --project-path dist/hangul-utils.jar
+clojure -Spom
