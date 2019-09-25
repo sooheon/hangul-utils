@@ -9,5 +9,9 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
+    - name: Install Clojure
+      run: curl -O https://download.clojure.org/install/linux-install-1.10.1.469.sh
+      run: chmod +x linux-install-1.10.1.469.sh
+      run: sudo ./linux-install-1.10.1.469.sh
     - name: Run tests
       run: bin/kaocha
