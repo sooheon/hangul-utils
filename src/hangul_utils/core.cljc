@@ -4,12 +4,13 @@
    [clojure.set :as set]
    [clojure.spec.alpha :as s]))
 
+(def ^:private code-point #?(:clj int :cljs #(. % codePointAt 0)))
 
 (defn korean-syllable?
   "Checks whether a given char lies within the Unicode codepoint range for
   Korean."
   [c]
-  (<= 0xAC00 (int c) 0xD7A3))
+  (<= 0xAC00 (code-point c) 0xD7A3))
 
 (def ^:private initial-jaeums
   "The jaeums (consonants) which begin Korean characters in modern usage."
@@ -36,10 +37,10 @@
   "Takes a single Korean syllable char and deconstructs it into its
    constituent jamo char: 강 => [ㄱ ㅏ ㅇ]"
   [c]
-  (let [codepoint (int c)
+  (let [codepoint (code-point c)
         diff (- codepoint 0xAC00)
-        i (Math/floorDiv diff 588)
-        m (Math/floorDiv (rem diff 588) 28)
+        i (quot diff 588)
+        m (quot (rem diff 588) 28)
         f (rem diff 28)]
     (if (neg? diff)
       [(char codepoint)]
